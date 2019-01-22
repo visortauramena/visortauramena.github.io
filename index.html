@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        #map {
+            width: 1066px;
+            height: 572px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/Subzonas_Hidrogrfica_3.js"></script>
+        <script src="data/Parques_Naturales_Regionales_4.js"></script>
+        <script src="data/Distritos_Regionales_de_Manejo_Integrado_5.js"></script>
+        <script src="data/Vereda_6.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[3.9751155437176706,-74.58572650887304],[5.927415567517478,-70.94143313111339]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>');
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            map.setMaxBounds(map.getBounds());
+        }
+        var layer_ESRITopo_0 = L.tileLayer('http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            opacity: 1.0
+        });
+        layer_ESRITopo_0.addTo(map);
+        map.addLayer(layer_ESRITopo_0);
+        var layer_GoogleHybrid_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+            opacity: 1.0
+        });
+        layer_GoogleHybrid_1.addTo(map);
+        map.addLayer(layer_GoogleHybrid_1);
+        var layer_GoogleRoad_2 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            opacity: 1.0
+        });
+        layer_GoogleRoad_2.addTo(map);
+        map.addLayer(layer_GoogleRoad_2);
+        function pop_Subzonas_Hidrogrfica_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COD_AH'] !== null ? Autolinker.link(String(feature.properties['COD_AH'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COD_ZH'] !== null ? Autolinker.link(String(feature.properties['COD_ZH'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COD_SZH'] !== null ? Autolinker.link(String(feature.properties['COD_SZH'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NOM_AH'] !== null ? Autolinker.link(String(feature.properties['NOM_AH'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NOM_ZH'] !== null ? Autolinker.link(String(feature.properties['NOM_ZH'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NOM_SZH</th>\
+                        <td>' + (feature.properties['NOM_SZH'] !== null ? Autolinker.link(String(feature.properties['NOM_SZH'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Subzonas_Hidrogrfica_3_0() {
+            return {
+                pane: 'pane_Subzonas_Hidrogrfica_3',
+                opacity: 1,
+                color: 'rgba(31,120,180,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+            }
+        }
+        map.createPane('pane_Subzonas_Hidrogrfica_3');
+        map.getPane('pane_Subzonas_Hidrogrfica_3').style.zIndex = 403;
+        map.getPane('pane_Subzonas_Hidrogrfica_3').style['mix-blend-mode'] = 'normal';
+        var layer_Subzonas_Hidrogrfica_3 = new L.geoJson(json_Subzonas_Hidrogrfica_3, {
+            attribution: '',
+            pane: 'pane_Subzonas_Hidrogrfica_3',
+            onEachFeature: pop_Subzonas_Hidrogrfica_3,
+            style: style_Subzonas_Hidrogrfica_3_0,
+        });
+        bounds_group.addLayer(layer_Subzonas_Hidrogrfica_3);
+        map.addLayer(layer_Subzonas_Hidrogrfica_3);
+        function pop_Parques_Naturales_Regionales_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['objectid'] !== null ? Autolinker.link(String(feature.properties['objectid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nombre'] !== null ? Autolinker.link(String(feature.properties['nombre'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id_pnn'] !== null ? Autolinker.link(String(feature.properties['id_pnn'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['categoria'] !== null ? Autolinker.link(String(feature.properties['categoria'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['territoria'] !== null ? Autolinker.link(String(feature.properties['territoria'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['resolucion'] !== null ? Autolinker.link(String(feature.properties['resolucion'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['hectareas_'] !== null ? Autolinker.link(String(feature.properties['hectareas_'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['escala'] !== null ? Autolinker.link(String(feature.properties['escala'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['organizaci'] !== null ? Autolinker.link(String(feature.properties['organizaci'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fecha_act'] !== null ? Autolinker.link(String(feature.properties['fecha_act'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['url'] !== null ? Autolinker.link(String(feature.properties['url'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['wkid'] !== null ? Autolinker.link(String(feature.properties['wkid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['app_id'] !== null ? Autolinker.link(String(feature.properties['app_id'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['record_id'] !== null ? Autolinker.link(String(feature.properties['record_id'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['centroid_x'] !== null ? Autolinker.link(String(feature.properties['centroid_x'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['centroid_y'] !== null ? Autolinker.link(String(feature.properties['centroid_y'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fecha_regi'] !== null ? Autolinker.link(String(feature.properties['fecha_regi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['validado'] !== null ? Autolinker.link(String(feature.properties['validado'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['hectareas0'] !== null ? Autolinker.link(String(feature.properties['hectareas0'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['perimetro_'] !== null ? Autolinker.link(String(feature.properties['perimetro_'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['globalid'] !== null ? Autolinker.link(String(feature.properties['globalid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['sde_state_'] !== null ? Autolinker.link(String(feature.properties['sde_state_'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Parques_Naturales_Regionales_4_0() {
+            return {
+                pane: 'pane_Parques_Naturales_Regionales_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(51,160,44,1.0)',
+            }
+        }
+        map.createPane('pane_Parques_Naturales_Regionales_4');
+        map.getPane('pane_Parques_Naturales_Regionales_4').style.zIndex = 404;
+        map.getPane('pane_Parques_Naturales_Regionales_4').style['mix-blend-mode'] = 'normal';
+        var layer_Parques_Naturales_Regionales_4 = new L.geoJson(json_Parques_Naturales_Regionales_4, {
+            attribution: '',
+            pane: 'pane_Parques_Naturales_Regionales_4',
+            onEachFeature: pop_Parques_Naturales_Regionales_4,
+            style: style_Parques_Naturales_Regionales_4_0,
+        });
+        bounds_group.addLayer(layer_Parques_Naturales_Regionales_4);
+        map.addLayer(layer_Parques_Naturales_Regionales_4);
+        function pop_Distritos_Regionales_de_Manejo_Integrado_5(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['objectid'] !== null ? Autolinker.link(String(feature.properties['objectid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nombre'] !== null ? Autolinker.link(String(feature.properties['nombre'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id_pnn'] !== null ? Autolinker.link(String(feature.properties['id_pnn'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['categoria'] !== null ? Autolinker.link(String(feature.properties['categoria'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['territoria'] !== null ? Autolinker.link(String(feature.properties['territoria'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['resolucion'] !== null ? Autolinker.link(String(feature.properties['resolucion'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['hectareas_'] !== null ? Autolinker.link(String(feature.properties['hectareas_'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['escala'] !== null ? Autolinker.link(String(feature.properties['escala'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['organizaci'] !== null ? Autolinker.link(String(feature.properties['organizaci'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fecha_act'] !== null ? Autolinker.link(String(feature.properties['fecha_act'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['url'] !== null ? Autolinker.link(String(feature.properties['url'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['wkid'] !== null ? Autolinker.link(String(feature.properties['wkid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['app_id'] !== null ? Autolinker.link(String(feature.properties['app_id'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['record_id'] !== null ? Autolinker.link(String(feature.properties['record_id'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['centroid_x'] !== null ? Autolinker.link(String(feature.properties['centroid_x'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['centroid_y'] !== null ? Autolinker.link(String(feature.properties['centroid_y'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fecha_regi'] !== null ? Autolinker.link(String(feature.properties['fecha_regi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['validado'] !== null ? Autolinker.link(String(feature.properties['validado'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['hectareas0'] !== null ? Autolinker.link(String(feature.properties['hectareas0'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['perimetro_'] !== null ? Autolinker.link(String(feature.properties['perimetro_'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['globalid'] !== null ? Autolinker.link(String(feature.properties['globalid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['sde_state_'] !== null ? Autolinker.link(String(feature.properties['sde_state_'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Distritos_Regionales_de_Manejo_Integrado_5_0() {
+            return {
+                pane: 'pane_Distritos_Regionales_de_Manejo_Integrado_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(38,236,160,1.0)',
+            }
+        }
+        map.createPane('pane_Distritos_Regionales_de_Manejo_Integrado_5');
+        map.getPane('pane_Distritos_Regionales_de_Manejo_Integrado_5').style.zIndex = 405;
+        map.getPane('pane_Distritos_Regionales_de_Manejo_Integrado_5').style['mix-blend-mode'] = 'normal';
+        var layer_Distritos_Regionales_de_Manejo_Integrado_5 = new L.geoJson(json_Distritos_Regionales_de_Manejo_Integrado_5, {
+            attribution: '',
+            pane: 'pane_Distritos_Regionales_de_Manejo_Integrado_5',
+            onEachFeature: pop_Distritos_Regionales_de_Manejo_Integrado_5,
+            style: style_Distritos_Regionales_de_Manejo_Integrado_5_0,
+        });
+        bounds_group.addLayer(layer_Distritos_Regionales_de_Manejo_Integrado_5);
+        map.addLayer(layer_Distritos_Regionales_de_Manejo_Integrado_5);
+        function pop_Vereda_6(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COD_DPTO'] !== null ? Autolinker.link(String(feature.properties['COD_DPTO'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COD_MUNI'] !== null ? Autolinker.link(String(feature.properties['COD_MUNI'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COD_VERE'] !== null ? Autolinker.link(String(feature.properties['COD_VERE'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NOM_VERE'] !== null ? Autolinker.link(String(feature.properties['NOM_VERE'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['AREA_HA_'] !== null ? Autolinker.link(String(feature.properties['AREA_HA_'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Vereda_6_0() {
+            return {
+                pane: 'pane_Vereda_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,182,54,0.0)',
+            }
+        }
+        map.createPane('pane_Vereda_6');
+        map.getPane('pane_Vereda_6').style.zIndex = 406;
+        map.getPane('pane_Vereda_6').style['mix-blend-mode'] = 'normal';
+        var layer_Vereda_6 = new L.geoJson(json_Vereda_6, {
+            attribution: '',
+            pane: 'pane_Vereda_6',
+            onEachFeature: pop_Vereda_6,
+            style: style_Vereda_6_0,
+        });
+        bounds_group.addLayer(layer_Vereda_6);
+        map.addLayer(layer_Vereda_6);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Vereda_6.png" /> Vereda': layer_Vereda_6,'<img src="legend/Distritos_Regionales_de_Manejo_Integrado_5.png" /> Distritos_Regionales_de_Manejo_Integrado': layer_Distritos_Regionales_de_Manejo_Integrado_5,'<img src="legend/Parques_Naturales_Regionales_4.png" /> Parques_Naturales_Regionales': layer_Parques_Naturales_Regionales_4,'<img src="legend/Subzonas_Hidrogrfica_3.png" /> Subzonas_Hidrográfica': layer_Subzonas_Hidrogrfica_3,"Google Road": layer_GoogleRoad_2,"Google Hybrid": layer_GoogleHybrid_1,"ESRI Topo": layer_ESRITopo_0,}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
